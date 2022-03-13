@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import {Button, View} from 'react-native';
-import BoardTitle from '../atoms/BoardTitle';
+import { Direction } from '../../interfaces/IDirections';
+import BoardTitle from './BoardTitle';
 
-export default function BoardView (props) {
-    console.log(props.selectedLine)
-
+export default function BoardView (props: {selectedLine: Direction, swapFunc: () => void}) {
     return (
         <View>
             <Button title = 'SWITCH' onPress = {props.swapFunc}/>
