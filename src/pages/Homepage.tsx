@@ -5,7 +5,7 @@ import handleApiCall from '../services/fetch';
 
 import SelectDropdown from 'react-native-select-dropdown';
 import { Direction } from '../interfaces/IDirections';
-// import BoardView from '../organisms/BoardView';
+import BoardView from '../components/BoardView/BoardView';
 
 
 export default function Homepage() {
@@ -17,7 +17,7 @@ export default function Homepage() {
     useEffect(() =>  {
         handleApiCall<Lines, null>('getLines').then(res => {
             if (res)
-            loadLines(res.lines)});
+                loadLines(res.lines)});
     }, [])
 
     //assignation of directions
@@ -38,18 +38,18 @@ export default function Homepage() {
         });
     }
 
-    // const swap = () => {
-    //     setSelectedLine(selectedLine => {
-    //         return directions.find(dir => selectedLine.from === dir.to )
-    //     })
-    // }
+    const swap = () => {
+        setSelectedLine(selectedLine => {
+            return directions.find(dir => selectedLine?.from === dir.to )
+        })
+    }
     
     return(
         <View>
-            {/* {selectedLine
+            {selectedLine
                 ? <BoardView selectedLine = {selectedLine} swapFunc = {swap} />
                 : <Text>Select a board</Text>
-            } */}
+            }
             <SelectDropdown
             	data={directions} 
             	onSelect={(selectedItem: Direction) => {
@@ -59,7 +59,7 @@ export default function Homepage() {
             	buttonTextAfterSelection={(selectedItem: Direction) => {
             		// text represented after item is selected
             		// if data array is an array of objects then return selectedItem.property to render after item is selected
-            		return selectedItem.from + ' - ' + selectedItem.to;
+            		return selectedLine?.from + ' - ' + selectedLine?.to;
             	}}
             	rowTextForSelection={(item: Direction) => {
             		// text represented for each item in dropdown
