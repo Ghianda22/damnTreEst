@@ -6,11 +6,21 @@ import handleApiCall from '../services/fetch';
 import SelectDropdown from 'react-native-select-dropdown';
 import { Direction } from '../interfaces/IDirections';
 import BoardView from '../components/BoardView/BoardView';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 export default function Homepage() {
     const [lines, loadLines] = useState<Line[]>();
-    const [selectedLine, setSelectedLine] = useState<Direction>(); //TODO initialize with the data of last viewed board
+    const [selectedLine, setSelectedLine] = useState<Direction>();
+
+    async function getLastSelectedBoard(): Promise<Direction | undefined> {
+        return await AsyncStorage.getItem('lastSelectedBoard').then(board => {
+            if (board){
+                return JSON.parse(board);
+            }else return undefined;
+        })
+    }
 
     let directions: Direction[] = [];
 
@@ -18,6 +28,7 @@ export default function Homepage() {
         handleApiCall<Lines, null>('getLines').then(res => {
             if (res)
                 loadLines(res.lines)});
+        getLastSelectedBoard().then(board => setSelectedLine(board));
     }, [])
 
     //assignation of directions
@@ -44,6 +55,14 @@ export default function Homepage() {
         })
     }
     
+    async function saveSelection(selectedBoard: Direction):Promise<void>{
+        try {
+            await AsyncStorage.setItem('lastSelectedBoard', JSON.stringify(selectedBoard));
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     return(
         <View>
             {selectedLine
@@ -54,9 +73,9 @@ export default function Homepage() {
             	data={directions} 
             	onSelect={(selectedItem: Direction) => {
                     setSelectedLine(selectedItem);
-		    		// save the selection on device
+		    		saveSelection(selectedItem);
             	}}
-            	buttonTextAfterSelection={(selectedItem: Direction) => {
+            	buttonTextAfterSelection={/*(selectedItem: Direction)*/() => {
             		// text represented after item is selected
             		// if data array is an array of objects then return selectedItem.property to render after item is selected
             		return selectedLine?.from + ' - ' + selectedLine?.to;
