@@ -8,14 +8,20 @@ import { Direction } from '../interfaces/IDirections';
 import BoardView from '../components/BoardView/BoardView';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+//typescript
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { StackParamList } from '../types/StackNavigator';
+type StackProps = NativeStackScreenProps<StackParamList, 'Home'>;
 
 
-export default function Homepage() {
+
+
+export default function HomeScreen({navigation}: StackProps) {
     const [lines, loadLines] = useState<Line[]>();
     const [selectedLine, setSelectedLine] = useState<Direction>();
 
-    async function getLastSelectedBoard(): Promise<Direction | undefined> {
-        return await AsyncStorage.getItem('lastSelectedBoard').then(board => {
+    async function getLatestSelectedBoard(): Promise<Direction | undefined> {
+        return await AsyncStorage.getItem('latestSelectedBoard').then(board => {
             if (board){
                 return JSON.parse(board);
             }else return undefined;
@@ -28,10 +34,11 @@ export default function Homepage() {
         handleApiCall<Lines, null>('getLines').then(res => {
             if (res)
                 loadLines(res.lines)});
-        getLastSelectedBoard().then(board => setSelectedLine(board));
+        getLatestSelectedBoard().then(board => setSelectedLine(board));
     }, [])
 
     //assignation of directions
+    //NOTE decoder
     if (lines){
         // goes in decoder?
         lines.map((lineObj) => {
@@ -57,11 +64,14 @@ export default function Homepage() {
     
     async function saveSelection(selectedBoard: Direction):Promise<void>{
         try {
-            await AsyncStorage.setItem('lastSelectedBoard', JSON.stringify(selectedBoard));
+            await AsyncStorage.setItem('latestSelectedBoard', JSON.stringify(selectedBoard));
         } catch (e) {
             console.log(e);
         }
     }
+
+    console.log((navigation))
+
 
     return(
         <View>
@@ -74,6 +84,7 @@ export default function Homepage() {
             	onSelect={(selectedItem: Direction) => {
                     setSelectedLine(selectedItem);
 		    		saveSelection(selectedItem);
+                    navigation.navigate('Board', selectedItem);
             	}}
             	buttonTextAfterSelection={/*(selectedItem: Direction)*/() => {
             		// text represented after item is selected
