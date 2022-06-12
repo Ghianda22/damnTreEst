@@ -18,7 +18,7 @@ type StackProps = NativeStackScreenProps<StackParamList, 'Home'>;
 
 export default function HomeScreen({navigation}: StackProps) {
     const [lines, loadLines] = useState<Line[]>();
-    const [selectedLine, setSelectedLine] = useState<Direction>();
+    const [selectedDirection, setSelectedDirection] = useState<Direction>();
 
     async function getLatestSelectedBoard(): Promise<Direction | undefined> {
         return await AsyncStorage.getItem('latestSelectedBoard').then(board => {
@@ -34,22 +34,20 @@ export default function HomeScreen({navigation}: StackProps) {
         handleApiCall<Lines, null>('getLines').then(res => {
             if (res)
                 loadLines(res.lines)});
-        getLatestSelectedBoard().then(board => setSelectedLine(board));
+        getLatestSelectedBoard().then(board => setSelectedDirection(board));
     }, [])
 
-    //assignation of directions
+    //PROCESSING DATA: assignation of directions
     //NOTE decoder
     if (lines){
-        // goes in decoder?
+
         lines.map((lineObj) => {
 
             Object.keys(lineObj).map((key) => {
 
                 if(key === 'terminus2'){
-                    // let lineeName = lineObj.terminus1.sname+ ' - ' + lineObj.terminus2.sname;
                     directions.push( { 'from': lineObj.terminus1.sname, 'to': lineObj.terminus2.sname,  'did':  lineObj.terminus2.did });
                 }else{
-                    // let lineName = lineObj.terminus2.sname+ ' - ' + lineObj.terminus1.sname;
                     directions.push( { 'from': lineObj.terminus2.sname,  'to': lineObj.terminus1.sname, 'did':  lineObj.terminus1.did });
                 }   
             })
@@ -57,8 +55,8 @@ export default function HomeScreen({navigation}: StackProps) {
     }
 
     const swap = () => {
-        setSelectedLine(selectedLine => {
-            return directions.find(dir => selectedLine?.from === dir.to )
+        setSelectedDirection(selectedDirection => {
+            return directions.find(dir => selectedDirection?.from === dir.to )
         })
     }
     
@@ -75,21 +73,18 @@ export default function HomeScreen({navigation}: StackProps) {
 
     return(
         <View>
-            {selectedLine
-                ? <BoardView selectedLine = {selectedLine} swapFunc = {swap} />
-                : <Text>Select a board</Text>
-            }
+            
             <SelectDropdown
             	data={directions} 
             	onSelect={(selectedItem: Direction) => {
-                    setSelectedLine(selectedItem);
+                    setSelectedDirection(selectedItem);
 		    		saveSelection(selectedItem);
                     navigation.navigate('Board', selectedItem);
             	}}
             	buttonTextAfterSelection={/*(selectedItem: Direction)*/() => {
             		// text represented after item is selected
             		// if data array is an array of objects then return selectedItem.property to render after item is selected
-            		return selectedLine?.from + ' - ' + selectedLine?.to;
+            		return selectedDirection?.from + ' - ' + selectedDirection?.to;
             	}}
             	rowTextForSelection={(item: Direction) => {
             		// text represented for each item in dropdown
@@ -97,6 +92,11 @@ export default function HomeScreen({navigation}: StackProps) {
             		return item.from + ' - ' + item.to;
             	}}
             />
+
+            {selectedDirection
+                ? <BoardView selectedDirection = {selectedDirection} swapFunc = {swap} />
+                : <Text>Select a board</Text>
+            }
             
         </View>
         
