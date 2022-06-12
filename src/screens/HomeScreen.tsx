@@ -5,7 +5,6 @@ import handleApiCall from '../services/fetch';
 
 import SelectDropdown from 'react-native-select-dropdown';
 import { Direction } from '../interfaces/IDirections';
-import BoardView from '../components/HomeScreen/BoardView';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //typescript
