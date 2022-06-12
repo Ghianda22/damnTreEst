@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, View } from 'react-native';
 import { Lines, Line } from '../interfaces/ILines';
 import handleApiCall from '../services/fetch';
 
 import SelectDropdown from 'react-native-select-dropdown';
 import { Direction } from '../interfaces/IDirections';
-import BoardView from '../components/BoardView/BoardView';
+import BoardView from '../components/HomeScreen/BoardView';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //typescript
@@ -73,6 +73,7 @@ export default function HomeScreen({navigation}: StackProps) {
 
     return(
         <View>
+            <Button title='Profilo' onPress={() => navigation.navigate('User')} />
             
             <SelectDropdown
             	data={directions} 
@@ -93,10 +94,6 @@ export default function HomeScreen({navigation}: StackProps) {
             	}}
             />
 
-            {selectedDirection
-                ? <BoardView selectedDirection = {selectedDirection} swapFunc = {swap} />
-                : <Text>Select a board</Text>
-            }
             
         </View>
         
