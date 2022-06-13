@@ -21,6 +21,7 @@ export default function Posts(){
 const styles = StyleSheet.create({
     form: {
         padding: '200px',
-        border: '3px solid black'
+        borderWidth: 3,
+        borderColor: 'blue'
     }
 })

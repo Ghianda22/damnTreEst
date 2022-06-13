@@ -66,9 +66,10 @@ export default function HomeScreen({navigation}: StackProps) {
             console.log(e);
         }
     }
-
-    console.log((navigation))
-
+    
+    const goToBoard = () => {
+        selectedDirection && navigation.navigate('Board', selectedDirection);
+    }
 
     return(
         <View>
@@ -92,7 +93,14 @@ export default function HomeScreen({navigation}: StackProps) {
             		return item.from + ' - ' + item.to;
             	}}
             />
-
+            {/* latest board */}
+            {selectedDirection && <View>
+                <Text>Ultima ricerca: </Text>
+                <View>
+                    <Text>{selectedDirection?.from + ' - ' + selectedDirection?.to}</Text>
+                    <Button title='->' onPress={goToBoard} />
+                </View>
+            </View>}
             
         </View>
         

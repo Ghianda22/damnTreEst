@@ -15,14 +15,10 @@ const Tab = createMaterialTopTabNavigator();
 
 export default function BoardScreen({route, navigation}:StackProps) {
     return (
-        <View>
-            <Text>{route.params.from}</Text>
-
-            <Tab.Navigator>
+        <Tab.Navigator>
                 <Tab.Screen name='Stops' component={Stops} />
                 <Tab.Screen name='Map' component={Map} />
                 <Tab.Screen name='Posts' component={Posts} />
-            </Tab.Navigator>
-        </View>
+        </Tab.Navigator>
     );
 }
