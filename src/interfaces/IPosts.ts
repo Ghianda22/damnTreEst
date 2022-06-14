@@ -10,7 +10,7 @@ export interface Post {
     datetime: string,
     authorName: string,
     pversion: string,
-    author: string
+    author: string //uid
 }
 
 
