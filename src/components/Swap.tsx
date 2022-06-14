@@ -1,14 +1,13 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import { Direction } from '../interfaces/IDirections';
-import { faArrowRightArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 export default function Swap (props: {selectedDirection: Direction | undefined, swapFunc: () => void }) {
     
     return (
         <View style = {styles.button}>
             
-            <FontAwesomeIcon icon={faArrowRightArrowLeft} onClick = {props.swapFunc} />
+            {/* <FontAwesomeIcon icon={faArrowRightArrowLeft} onClick = {props.swapFunc} /> */}
 
         </View>
     )
