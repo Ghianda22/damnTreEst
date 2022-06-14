@@ -1,0 +1,6 @@
+to make it work in lab:
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+before everything on terminal
+
+
+0a8B714V4eEI
