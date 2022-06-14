@@ -1,28 +1,32 @@
+import React, { useState } from 'react';
 import {Text, View} from 'react-native';
 
 //typescript
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StackParamList } from '../types/StackNavigator';
-type StackProps = NativeStackScreenProps<StackParamList, 'Board'>;
+import { Direction } from '../interfaces/IDirections';
+import { BoardNSP } from '../types/NativeStackNavigator';
+import { MaterialTopTabParamList } from '../types/MaterialTopTabNavigator';
+
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Map from '../components/BoardScreen/Map';
-import Posts from '../components/BoardScreen/Posts';
+import PostsScreen from '../components/BoardScreen/Posts';
 import Stops from '../components/BoardScreen/Stops';
-import React, { useState } from 'react';
 
-const Tab = createMaterialTopTabNavigator();
+const Tab = createMaterialTopTabNavigator<MaterialTopTabParamList>();
 
+export default function BoardScreen({route, navigation}: BoardNSP) {
+    const [direction, setDirection] = useState<Direction>(route.params.direction);
+    //dynamic header
+    React.useLayoutEffect(() => {
+        navigation.setOptions({ headerTitle: direction.from + ' - ' + direction.to });
+      }, [navigation, route]);
 
-export default function BoardScreen({route, navigation}:StackProps) {
-    const [direction, setDirection] = useState(route.params.direction);
-    
     
     return (
         <Tab.Navigator>
                 <Tab.Screen name='Stops' component={Stops} />
                 <Tab.Screen name='Map' component={Map} />
-                <Tab.Screen name='Posts' component={Posts} />
+                <Tab.Screen name='Posts' component={PostsScreen} initialParams={{did: direction.did}} />
         </Tab.Navigator>
     );
 }

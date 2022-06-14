@@ -8,14 +8,12 @@ import { Direction } from '../interfaces/IDirections';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //typescript
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StackParamList } from '../types/StackNavigator';
-type StackProps = NativeStackScreenProps<StackParamList, 'Home'>;
+import { HomeNSP } from '../types/NativeStackNavigator';
 
 
 
 
-export default function HomeScreen({navigation}: StackProps) {
+export default function HomeScreen({navigation}: HomeNSP) {
     const [lines, loadLines] = useState<Line[]>();
     const [selectedDirection, setSelectedDirection] = useState<Direction>();
 
@@ -68,7 +66,10 @@ export default function HomeScreen({navigation}: StackProps) {
     }
     
     const goToBoard = () => {
-        selectedDirection && navigation.navigate('Board', selectedDirection);
+        selectedDirection && navigation.navigate('Board', {
+            direction: selectedDirection,
+            line: directions
+        });
     }
 
     return(
